@@ -8,26 +8,56 @@ The system is designed for **research, academic demonstration, and real-world de
 
 ---
 
-## 🚀 How to Run the Project (Quick Start)
+## 🚀 How to Run the Project
 
-### 1️⃣ Clone the Repository
+### Option 1: Docker (Recommended for Deployment) 🐳
+
+This project is **production-ready** and fully containerized with Docker.
+
+#### Build the Docker Image
+
+    docker build -t bangla-classifier .
+
+#### Run Locally
+
+    docker run -p 8000:8000 bangla-classifier
+
+#### Open in Browser
+
+    http://localhost:8000
+
+#### Deploy to Cloud (DigitalOcean, AWS, etc.)
+
+    # Tag for Docker Hub
+    docker tag bangla-classifier your-username/bangla-classifier
+    docker push your-username/bangla-classifier
+
+    # Or for DigitalOcean Container Registry
+    docker tag bangla-classifier registry.digitalocean.com/your-registry/bangla-classifier
+    docker push registry.digitalocean.com/your-registry/bangla-classifier
+
+---
+
+### Option 2: Local Development (Without Docker)
+
+#### 1️⃣ Clone the Repository
 
     git clone https://github.com/Mahedi9/Django-Bangla-Document-Classification-Using-Deep-learning.git
     cd Django-Bangla-Document-Classification-Using-Deep-learning
 
-### 2️⃣ Install Dependencies
+#### 2️⃣ Install Dependencies
 
     pip install -r requirements.txt
 
-### 3️⃣ Run Database Migrations
+#### 3️⃣ Run Database Migrations
 
     python manage.py migrate
 
-### 4️⃣ Start the Django Server
+#### 4️⃣ Start the Django Server
 
     python manage.py runserver
 
-### 5️⃣ Open in Browser
+#### 5️⃣ Open in Browser
 
     http://127.0.0.1:8000/
 
@@ -109,10 +139,11 @@ bangla_classifier_django/
 │   └── bangla_bert_model/  
 │  
 ├── static/  
+├── Dockerfile  
 ├── manage.py  
 ├── requirements.txt  
 ├── .gitignore  
-└── .gitattributes  
+└── .gitattributes
 
 ---
 

@@ -3,12 +3,12 @@ import torch
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 from .loader import (
-    BILSTM_MODEL,
-    BILSTM_TOKENIZER,
-    LABEL_ENCODER,
-    BERT_MODEL,
-    BERT_TOKENIZER,
-    DEVICE,
+    get_bilstm_model,
+    get_bilstm_tokenizer,
+    get_label_encoder,
+    get_bert_model,
+    get_bert_tokenizer,
+    get_device,
 )
 from .preprocess import clean_article, remove_stopwords
 
@@ -23,24 +23,24 @@ def predict(text):
     # Bi-LSTM Prediction
     # ===============================
     t = remove_stopwords(clean_article(text))
-    seq = BILSTM_TOKENIZER.texts_to_sequences([t])
+    seq = get_bilstm_tokenizer().texts_to_sequences([t])
     pad = pad_sequences(seq, maxlen=400, padding="post")
-    bilstm_probs = BILSTM_MODEL.predict(pad, verbose=0)[0]
+    bilstm_probs = get_bilstm_model().predict(pad, verbose=0)[0]
 
     # ===============================
     # Bangla-BERT Prediction
     # ===============================
-    inputs = BERT_TOKENIZER(
+    inputs = get_bert_tokenizer()(
         clean_article(text),
         return_tensors="pt",
         truncation=True,
         padding=True,
         max_length=512,
     )
-    inputs = {k: v.to(DEVICE) for k, v in inputs.items()}
+    inputs = {k: v.to(get_device()) for k, v in inputs.items()}
 
     with torch.no_grad():
-        logits = BERT_MODEL(**inputs).logits
+        logits = get_bert_model()(**inputs).logits
 
     bert_probs = torch.softmax(logits, dim=1).cpu().numpy()[0]
 
@@ -49,7 +49,7 @@ def predict(text):
     # ===============================
     ensemble_probs = 0.5 * bilstm_probs + 0.5 * bert_probs
 
-    classes = LABEL_ENCODER.classes_
+    classes = get_label_encoder().classes_
 
     # ===============================
     # CONFIDENCE THRESHOLD LOGIC
