@@ -26,5 +26,5 @@ RUN pip install --upgrade pip && \
 # Static collect
 RUN python manage.py collectstatic --noinput
 
-# Run server
-CMD ["gunicorn", "bangla_classifier_django.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Run server with increased timeout for Deep Learning inference
+CMD ["gunicorn", "bangla_classifier_django.wsgi:application", "--bind", "0.0.0.0:8000", "--timeout", "120"]
