@@ -27,6 +27,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# CSRF Trusted Origins (required for Cloudflare/Nginx proxy)
+CSRF_TRUSTED_ORIGINS = [
+    'https://newsclassifier.mahedihasanemon.site',
+    'http://newsclassifier.mahedihasanemon.site',
+    'http://24.144.83.255:8000',
+    'http://24.144.83.255',
+]
+
 
 # Application definition
 
