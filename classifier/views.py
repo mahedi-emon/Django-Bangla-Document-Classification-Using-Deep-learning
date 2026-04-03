@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from .ml.predict import predict
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io
 import base64

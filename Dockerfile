@@ -1,15 +1,20 @@
 FROM python:3.11-slim
 
-# System deps (important for ML)
+# System deps (important for ML + Git LFS)
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
+    git \
+    git-lfs \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy requirements first (cache optimization)
-COPY requirements.txt .
+# Copy full project (including .git folder)
+COPY . .
+
+# Pull actual LFS files using the .git folder
+RUN git lfs install && git lfs pull
 
 # Allow deprecated sklearn package (required by bnltk)
 ENV SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True
@@ -17,9 +22,6 @@ ENV SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True
 # Upgrade pip and install requirements
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
-
-# Copy full project
-COPY . .
 
 # Static collect
 RUN python manage.py collectstatic --noinput
