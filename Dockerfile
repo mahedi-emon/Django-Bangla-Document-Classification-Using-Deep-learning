@@ -14,9 +14,9 @@ COPY requirements.txt .
 # Allow deprecated sklearn package (required by bnltk)
 ENV SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True
 
-# Upgrade pip and install requirements
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# Upgrade pip and install requirements (suppress root warning)
+RUN pip install --upgrade pip --root-user-action=ignore && \
+    pip install --no-cache-dir --root-user-action=ignore -r requirements.txt
 
 # Copy project code only (models will be downloaded from Hugging Face at runtime)
 COPY bangla_classifier_django/ bangla_classifier_django/
