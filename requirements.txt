@@ -1,3 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 Django
 gunicorn
 numpy
@@ -11,6 +12,6 @@ tqdm
 torch
 transformers
 huggingface_hub
-tensorflow
+tensorflow-cpu
 
 bnltk
