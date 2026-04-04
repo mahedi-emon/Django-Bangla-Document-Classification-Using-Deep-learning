@@ -10,6 +10,7 @@ tqdm
 
 torch
 transformers
+huggingface_hub
 tensorflow
 
 bnltk

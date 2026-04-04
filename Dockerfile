@@ -1,20 +1,15 @@
 FROM python:3.11-slim
 
-# System deps (important for ML + Git LFS)
+# System deps (important for ML)
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
-    git \
-    git-lfs \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy full project (including .git folder)
-COPY . .
-
-# Pull actual LFS files using the .git folder
-RUN git lfs install && git lfs pull
+# Copy requirements first (cache optimization)
+COPY requirements.txt .
 
 # Allow deprecated sklearn package (required by bnltk)
 ENV SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True
@@ -22,6 +17,12 @@ ENV SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True
 # Upgrade pip and install requirements
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
+
+# Copy project code only (models will be downloaded from Hugging Face at runtime)
+COPY bangla_classifier_django/ bangla_classifier_django/
+COPY classifier/ classifier/
+COPY static/ static/
+COPY manage.py .
 
 # Static collect
 RUN python manage.py collectstatic --noinput
